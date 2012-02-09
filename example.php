@@ -1,0 +1,12 @@
+<?php
+
+require_once 'SimpleCrypt.php';
+
+// show the algorithms available for use
+print_r( SimpleCrypt::get_available_algorithms() );
+
+// encrypt a string using Triple DES (CBC mode)
+$crypt = new SimpleCrypt( 'tripledes', 'mysecretkey', 'stringtoencrypt' );
+$encrypted_data = $crypt->encrypt_data();
+echo "Encrypted data: " . bin2hex( $encrypted_data ) . "\n";
+echo "Decrypted data: " . $crypt->decrypt_data( $encrypted_data ) . "\n";
