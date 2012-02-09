@@ -32,10 +32,10 @@ class SimpleCrypt {
     private $iv;
 
 
-    public function __construct( $algorithm, $key, $input ) {
+    public function __construct( $algorithm, $key ) {
         $this->algorithm = $algorithm;
         $this->key       = $key;
-        $this->input     = $input;
+
 
         $this->open_module();
         $this->create_init_vector();
@@ -57,7 +57,9 @@ class SimpleCrypt {
         return mcrypt_generic_init( $this->td, $this->key, $this->iv );
     }
 
-    public function encrypt_data() {
+    public function encrypt_data( $input ) {
+        $this->input     = $input;
+
         $this->generic_init();
         $enc = mcrypt_generic( $this->td, $this->input );
         mcrypt_generic_deinit( $this->td );
@@ -69,7 +71,8 @@ class SimpleCrypt {
      * @param $enc string
      */
     public function decrypt_data( $enc ) {
-        $this->generic_init();
+        $ret = $this->generic_init();
+
         $dec = mdecrypt_generic( $this->td, $enc );
         mcrypt_generic_deinit( $this->td );
 

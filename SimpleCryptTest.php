@@ -5,9 +5,11 @@ require_once 'SimpleCrypt.php';
 
 class SimpleCryptTest extends PHPUnit_Framework_TestCase {
     protected $simplecrypt;
+    private   $original_string;
 
     protected function setUp() {
-        $this->simplecrypt = new SimpleCrypt( 'tripledes', 'key', 'string' );
+        $this->original_string = 'very important data';
+        $this->simplecrypt = new SimpleCrypt( 'tripledes', 'mysecretkey' );
     }
 
     public function testObjectInstantiation() {
@@ -15,9 +17,11 @@ class SimpleCryptTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testEncryptedStringIsIdentitalAfterDecryption() {
-        $this->markTestIncomplete(
-                                  'This test has not been completed yet.'
-                                  );
-        $this->assertEquals( 'string', $this->simplecrypt->decrypt_data( $this->simplecrypt->encrypt_data() ) );
+        $enc = $this->simplecrypt->encrypt_data( $this->original_string );
+        $this->assertTrue( is_string( $enc ) );
+
+        $dec = $this->simplecrypt->decrypt_data( $enc );
+        $this->assertTrue( is_string( $dec ) );
+        $this->assertTrue( strncmp( $dec, $this->original_string, strlen($this->original_string)) == 0 );
     }
 }
